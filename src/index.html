@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>my shop</title>
+    <script type="text/javascript" src="./resource/knockout.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <main>
+      <header class="row">
+        <div class="row user_information">
+          <img width="39px" height="39px" data-bind="attr:{src: user.avatar}" />
+          <div class="header_text">
+            <small>bem vinda, </small>
+            <h1><strong data-bind="text: user.firstName"></strong></h1>
+          </div>
+        </div>
+        <div class="row user_icon_interaction">
+          <img
+            width="16px"
+            height="16px"
+            src="./assets/search_icon.png"
+            alt="busca"
+          />
+          <img
+            width="16px"
+            height="16px"
+            src="./assets/shop_icon.png"
+            alt="carrinho"
+          />
+        </div>
+      </header>
+      <h1 class="title">Destaque</h1>
+      <section data-bind="foreach: products">
+        <div class="product_card" data-bind="click: $parent.handleAddProductInCart">
+          <img data-bind="attr:{src: $data.image}" width="33px" alt="produto" />
+          <div class="product_information">
+            <h2 class="product_title" data-bind="text: $data.name"></h2>
+            <small data-bind="text: $data.description"></small>
+            <span data-bind="text: $data.price"></span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+  <script src="main.js"></script>
+</html>
+
