@@ -46,11 +46,14 @@
           class="product_card"
           data-bind="click: $parent.handleAddProductInCart"
         >
-          <img data-bind="attr:{src: $data.image}" width="33px" alt="produto" />
+          <div
+            class="imageContainer"
+            data-bind="style: { backgroundImage: 'url(\'' + $data.image + '\')' }"
+          ></div>
           <div class="product_information">
             <h2 class="product_title" data-bind="text: $data.name"></h2>
             <small data-bind="text: $data.description"></small>
-            <span data-bind="text: $data.price"></span>
+            <span data-bind="text: 'R$ ' + $data.price"></span>
           </div>
         </div>
       </section>
@@ -67,7 +70,7 @@
           Carrinho
         </h1>
         <div data-bind="foreach: cart">
-          <div class="backdrop_card_item">
+          <div class="backdrop_card_item" data-bind="click: $parent.removeItemFromCart">
             <div
               class="imageContainer"
               data-bind="style: { backgroundImage: 'url(\'' + $data.image + '\')' }"
@@ -75,14 +78,26 @@
             <div class="product_information">
               <h2 class="product_title" data-bind="text: $data.name"></h2>
               <small data-bind="text: $data.description"></small>
-              <span data-bind="text: $data.price"></span>
+              <div class="product_resume_details">
+                <span data-bind="text: 'R$ ' + $data.price"></span>
+                <span data-bind="text: $data.qty + ' items adicionados'"></span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="backdrop_card_resume"></div>
+      <div class="backdrop_card_resume">
+        <div>
+          <small>total valor</small>
+          <h2 data-bind="text: cartTotalValue"></h2>
+        </div>
+        <div>
+          <small>total item</small>
+          <h2 data-bind="text: cartQty"></h2>
+        </div>
+      </div>
     </div>
   </body>
-  <script src="main.js"></script>
+  <script src="main.js" type="module"></script>
 </html>
 
