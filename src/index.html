@@ -32,6 +32,7 @@
             alt="busca"
           />
           <img
+            data-bind="click: handleShowShopping"
             width="16px"
             height="16px"
             src="./assets/shop_icon.png"
@@ -41,7 +42,10 @@
       </header>
       <h1 class="title">Destaque</h1>
       <section data-bind="foreach: products">
-        <div class="product_card" data-bind="click: $parent.handleAddProductInCart">
+        <div
+          class="product_card"
+          data-bind="click: $parent.handleAddProductInCart"
+        >
           <img data-bind="attr:{src: $data.image}" width="33px" alt="produto" />
           <div class="product_information">
             <h2 class="product_title" data-bind="text: $data.name"></h2>
@@ -51,6 +55,33 @@
         </div>
       </section>
     </main>
+    <div
+      class="backdrop"
+      data-bind="class: showShopping, click: handleHideShopping"
+    >
+      <div class="backdrop_card">
+        <h1
+          class="title"
+          style="margin-top: 0px; margin-bottom: 24px; font-size: 20px"
+        >
+          Carrinho
+        </h1>
+        <div data-bind="foreach: cart">
+          <div class="backdrop_card_item">
+            <div
+              class="imageContainer"
+              data-bind="style: { backgroundImage: 'url(\'' + $data.image + '\')' }"
+            ></div>
+            <div class="product_information">
+              <h2 class="product_title" data-bind="text: $data.name"></h2>
+              <small data-bind="text: $data.description"></small>
+              <span data-bind="text: $data.price"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="backdrop_card_resume"></div>
+    </div>
   </body>
   <script src="main.js"></script>
 </html>

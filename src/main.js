@@ -1,5 +1,6 @@
 function AppViewModel() {
-  this.cart = []
+  this.cart = ko.observableArray([])
+  this.showShopping = ko.observable('isHidden')
   this.user = {
     firstName: ko.observable('Angela Pires'),
     avatar: ko.observable('./assets/avatar.png'),
@@ -27,20 +28,15 @@ function AppViewModel() {
       image: './assets/products/leite_coco.png',
     },
   ])
-
+  this.handleShowShopping = () => this.showShopping('isShow')
+  this.handleHideShopping = () => this.showShopping('isHidden')
   this.handleAddProductInCart = (data) => {
-    const verifyItemInCart = this.cart.filter((cartItem) => {
-      return cartItem.id !== data.id  
-    })
-    console.log(data)
-    if (verifyItemInCart) {
-      return (this.cart = [
-        ...verifyItemInCart,
-        { ...data, qty: data.qty ? data.qty + 1 : 1 },
-      ])
+    const filter = this.cart().filter((item) => item.id !== data.id)
+    const itemInCart = this.cart().find((item) => item.id === data.id)
+    if (itemInCart) {
+      return this.cart([...filter, { ...data, qty: itemInCart.qty + 1 }])
     }
-
-    return (this.cart = [...this.cart, { ...data, qty: 1 }])
+    return this.cart([...this.cart(), { ...data, qty: 1 }])
   }
 }
 
