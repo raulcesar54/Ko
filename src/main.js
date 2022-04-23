@@ -89,6 +89,9 @@ function AppViewModel() {
     }
     return
   }
+  this.isAvalibleCartItems = ko.computed(() => {
+    return this.cart().length > 0 && 'avalible'
+  })
 }
 
 const viewProvider = new AppViewModel()

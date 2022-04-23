@@ -131,7 +131,6 @@ section img {
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  
 }
 .product_resume_details span {
   font-size: 14px;
@@ -151,6 +150,17 @@ section img {
   flex-direction: row;
   gap: 20px;
   margin-bottom: 26px;
+}
+
+.selected {
+  border: 3px solid #2727271c;
+}
+.unvalible {
+  opacity: .3;
+  cursor: not-allowed;
+}
+.avalible {
+  opacity: 1;
 }
 .backdrop img {
   height: auto;

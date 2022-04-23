@@ -32,7 +32,8 @@
             alt="busca"
           />
           <img
-            data-bind="click: handleShowShopping"
+            class="unvalible"
+            data-bind="click: handleShowShopping, class: isAvalibleCartItems"
             width="16px"
             height="16px"
             src="./assets/shop_icon.png"
@@ -70,7 +71,10 @@
           Carrinho
         </h1>
         <div data-bind="foreach: cart">
-          <div class="backdrop_card_item" data-bind="click: $parent.removeItemFromCart">
+          <div
+            class="backdrop_card_item"
+            data-bind="click: $parent.removeItemFromCart"
+          >
             <div
               class="imageContainer"
               data-bind="style: { backgroundImage: 'url(\'' + $data.image + '\')' }"
