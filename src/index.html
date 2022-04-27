@@ -13,94 +13,16 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet/less" type="text/css" href="style.less" />
+    <script src="resource/less.js"></script>
   </head>
   <body>
-    <main>
-      <header class="row">
-        <div class="row user_information">
-          <img width="39px" height="39px" data-bind="attr:{src: user.avatar}" />
-          <div class="header_text">
-            <small>bem vinda, </small>
-            <h1><strong data-bind="text: user.firstName"></strong></h1>
-          </div>
-        </div>
-        <div class="row user_icon_interaction">
-          <img
-            width="16px"
-            height="16px"
-            src="./assets/search_icon.png"
-            alt="busca"
-          />
-          <img
-            class="unvalible"
-            data-bind="click: handleShowShopping, class: isAvalibleCartItems"
-            width="16px"
-            height="16px"
-            src="./assets/shop_icon.png"
-            alt="carrinho"
-          />
-        </div>
-      </header>
+    <main class="teste">
+      <header-component class="row" params="cart: cart"> </header-component>
       <h1 class="title">Destaque</h1>
-      <section data-bind="foreach: products">
-        <div
-          class="product_card"
-          data-bind="click: $parent.handleAddProductInCart"
-        >
-          <div
-            class="imageContainer"
-            data-bind="style: { backgroundImage: 'url(\'' + $data.image + '\')' }"
-          ></div>
-          <div class="product_information">
-            <h2 class="product_title" data-bind="text: $data.name"></h2>
-            <small data-bind="text: $data.description"></small>
-            <span data-bind="text: 'R$ ' + $data.price"></span>
-          </div>
-        </div>
-      </section>
+      <products></products>
+      <modal></modal>
     </main>
-    <div
-      class="backdrop"
-      data-bind="class: showShopping, click: handleHideShopping"
-    >
-      <div class="backdrop_card">
-        <h1
-          class="title"
-          style="margin-top: 0px; margin-bottom: 24px; font-size: 20px"
-        >
-          Carrinho
-        </h1>
-        <div data-bind="foreach: cart">
-          <div
-            class="backdrop_card_item"
-            data-bind="click: $parent.removeItemFromCart"
-          >
-            <div
-              class="imageContainer"
-              data-bind="style: { backgroundImage: 'url(\'' + $data.image + '\')' }"
-            ></div>
-            <div class="product_information">
-              <h2 class="product_title" data-bind="text: $data.name"></h2>
-              <small data-bind="text: $data.description"></small>
-              <div class="product_resume_details">
-                <span data-bind="text: 'R$ ' + $data.price"></span>
-                <span data-bind="text: $data.qty + ' items adicionados'"></span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="backdrop_card_resume">
-        <div>
-          <small>total valor</small>
-          <h2 data-bind="text: cartTotalValue"></h2>
-        </div>
-        <div>
-          <small>total item</small>
-          <h2 data-bind="text: cartQty"></h2>
-        </div>
-      </div>
-    </div>
   </body>
   <script src="main.js" type="module"></script>
 </html>

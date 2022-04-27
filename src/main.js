@@ -1,28 +1,17 @@
-function AppViewModel() {
-  this.cart = ko.observableArray([])
-  this.cartQty = ko.computed(() => {
-    const value = this.cart().reduce(
-      (acc, curren) => {
-        return { qty: acc.qty + curren.qty }
-      },
-      { qty: 0 }
-    )
-    return `${value.qty} items`
-  })
-  this.cartTotalValue = ko.computed(() => {
-    const { price } = this.cart().reduce(
-      (acc, curren) => {
-        return { price: acc.price + curren.price * curren.qty }
-      },
-      { price: 0 }
-    )
-    return `R$ ${price.toFixed(2)}`
-  })
-  this.showShopping = ko.observable('isHidden')
-  this.user = {
-    firstName: ko.observable('Angela Pires'),
-    avatar: ko.observable('./assets/avatar.png'),
+import headerTemplate from './components/header/template.js'
+import productsTemplate from './components/products/template.js'
+import modalTemplate from './components/modal/template.js'
+
+function GlobalInformation() {
+  let showShopping = ko.observable('isHidden')
+  let cart = ko.observableArray([])
+  return {
+    showShopping,
+    cart,
   }
+}
+const viewProvider = new GlobalInformation()
+function Products() {
   this.products = ko.observableArray([
     {
       id: 1,
@@ -67,33 +56,109 @@ function AppViewModel() {
       image: './assets/products/qboa.png',
     },
   ])
-  this.handleShowShopping = () => {
-    if (this.cart().length > 0) {
-      this.showShopping('isShow')
-    }
-  }
-  this.handleHideShopping = () => this.showShopping('isHidden')
+}
+function Cart() {
+  this.cart = viewProvider.cart()
   this.handleAddProductInCart = (data) => {
-    const filter = this.cart().filter((item) => item.id !== data.id)
-    const itemInCart = this.cart().find((item) => item.id === data.id)
+    const filter = viewProvider.cart().filter((item) => item.id !== data.id)
+    const itemInCart = viewProvider.cart().find((item) => item.id === data.id)
     if (itemInCart) {
-      return this.cart([...filter, { ...data, qty: itemInCart.qty + 1 }])
+      return viewProvider.cart([
+        ...filter,
+        { ...data, qty: itemInCart.qty + 1 },
+      ])
     }
-    return this.cart([...this.cart(), { ...data, qty: 1, selected: true }])
+    return viewProvider.cart([
+      ...viewProvider.cart(),
+      { ...data, qty: 1, selected: true },
+    ])
   }
   this.removeItemFromCart = (value, event) => {
     event.stopPropagation()
     const confirm = window.confirm('Tem certeza que deseja remover este item?')
     if (confirm) {
-      return this.cart(this.cart().filter((item) => item.id !== value.id))
+      return viewProvider.cart(
+        viewProvider.cart().filter((item) => item.id !== value.id)
+      )
     }
     return
   }
-  this.isAvalibleCartItems = ko.computed(() => {
-    return this.cart().length > 0 && 'avalible'
+  this.cartQty = ko.computed(() => {
+    const value = viewProvider.cart().reduce(
+      (acc, curren) => {
+        return { qty: acc.qty + curren.qty }
+      },
+      { qty: 0 }
+    )
+    return `${value.qty} items`
+  })
+  this.cartTotalValue = ko.computed(() => {
+    const { price } = viewProvider.cart().reduce(
+      (acc, curren) => {
+        return { price: acc.price + curren.price * curren.qty }
+      },
+      { price: 0 }
+    )
+    return `R$ ${price.toFixed(2)}`
   })
 }
+ko.components.register('header-component', {
+  template: headerTemplate,
+  viewModel: function (params) {
+    this.user = {
+      firstName: ko.observable('Angela Pires'),
+      avatar: ko.observable('./assets/avatar.png'),
+    }
+    this.handleShowShopping = () => {
+      if (params.cart().length > 0) {
+        viewProvider.showShopping('isShow')
+      }
+    }
+    this.isAvalibleCartItems = ko.computed(() => {
+      return params.cart().length > 0 && 'avalible'
+    })
+  },
+})
+ko.components.register('products', {
+  template: productsTemplate,
+  viewModel: function (params) {
+    const { products } = new Products()
+    const { handleAddProductInCart, removeItemFromCart } = new Cart()
+    this.handleAddProductInCart = handleAddProductInCart
+    this.removeItemFromCart = removeItemFromCart
+    this.products = products()
+  },
+})
+ko.components.register('modal', {
+  template: modalTemplate,
+  viewModel: function () {
+    this.cart = ko.computed(() => {
+      return viewProvider.cart()
+    })
+    this.handleHideShopping = () => {
+      viewProvider.showShopping('isHidden')
+    }
+    this.showShopping = ko.computed(() => viewProvider.showShopping())
+    this.cartTotalValue = ko.computed(() => {
+      const { price } = viewProvider.cart().reduce(
+        (acc, curren) => {
+          return { price: acc.price + curren.price * curren.qty }
+        },
+        { price: 0 }
+      )
+      return `R$ ${price.toFixed(2)}`
+    })
+    this.cartQty = ko.computed(() => {
+      const value = viewProvider.cart().reduce(
+        (acc, curren) => {
+          return { qty: acc.qty + curren.qty }
+        },
+        { qty: 0 }
+      )
+      return `${value.qty} items`
+    })
+  },
+})
 
-const viewProvider = new AppViewModel()
 ko.applyBindings(viewProvider)
 
