@@ -73,16 +73,7 @@ function Cart() {
       { ...data, qty: 1, selected: true },
     ])
   }
-  this.removeItemFromCart = (value, event) => {
-    event.stopPropagation()
-    const confirm = window.confirm('Tem certeza que deseja remover este item?')
-    if (confirm) {
-      return viewProvider.cart(
-        viewProvider.cart().filter((item) => item.id !== value.id)
-      )
-    }
-    return
-  }
+
   this.cartQty = ko.computed(() => {
     const value = viewProvider.cart().reduce(
       (acc, curren) => {
@@ -137,6 +128,18 @@ ko.components.register('modal', {
     })
     this.handleHideShopping = () => {
       viewProvider.showShopping('isHidden')
+    }
+    this.removeItemFromCart = (value, event) => {
+      event.stopPropagation()
+      const confirm = window.confirm(
+        'Tem certeza que deseja remover este item?'
+      )
+      if (confirm) {
+        return viewProvider.cart(
+          viewProvider.cart().filter((item) => item.id !== value.id)
+        )
+      }
+      return
     }
     this.showShopping = ko.computed(() => viewProvider.showShopping())
     this.cartTotalValue = ko.computed(() => {
